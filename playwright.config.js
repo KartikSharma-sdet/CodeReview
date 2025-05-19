@@ -8,7 +8,12 @@ import { defineConfig, devices } from '@playwright/test';
 // import dotenv from 'dotenv';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
-
+module.exports = defineConfig({
+  reporter: [
+    ['list'],
+    ['allure-playwright']
+  ]
+});
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
@@ -30,31 +35,25 @@ export default defineConfig({
     // baseURL: 'http://127.0.0.1:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    // trace: 'on-first-retry',
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { 
-        ...devices['Desktop Chrome'],
-        // viewport:{width:1500, height:700},
-        screenshot:'on', 
-        // trace : 'on'
-      },
+      name: 'Chromium',
+      use: { browserName: 'chromium' },
     },
-
-
     // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
+    //   name: 'Firefox',
+    //   use: { browserName: 'firefox' },
     // },
-
     // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
+    //   name: 'WebKit',
+    //   use: { browserName: 'webkit' },
+    // }
+  ]
+});
 
     /* Test against mobile viewports. */
     // {
@@ -67,7 +66,8 @@ export default defineConfig({
     // },
 
     /* Test against branded browsers. */
-    // {
+    // @ts-ignore
+    // ,{
     //   name: 'Microsoft Edge',
     //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
     // },
@@ -75,7 +75,7 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
-  ],
+  // ],
 
   /* Run your local dev server before starting the tests */
   // webServer: {
@@ -83,5 +83,5 @@ export default defineConfig({
   //   url: 'http://127.0.0.1:3000',
   //   reuseExistingServer: !process.env.CI,
   // },
-});
+// });
 

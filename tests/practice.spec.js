@@ -12,7 +12,7 @@ test("My Third Test", async function({page}){
     expect("Kartik Sharma").toContain("Sharma")
 })
 
-// test.only / test.skip
+// test.only / test.skip 
 
 test("My Google Test", async function({page}){
     await page.goto("https://google.com")
@@ -20,6 +20,7 @@ test("My Google Test", async function({page}){
     console.log("URL is " + url)
 
     const title = await page.title()
+    
     // expect(title).toBe("Google")
     await expect(page).toHaveTitle("Google")
     console.log("Title is " + title )
