@@ -14,5 +14,9 @@
     "allure-playwright": "^3.2.2",
     "chai": "^5.2.0",
     "jasmine": "^5.7.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "mysql2": "^3.14.1"
   }
 }

@@ -11,8 +11,8 @@ class Orange {
     }
 
     async login(username, password) {
-        await this.usernameBox.fill("Admin");
-        await this.passwordBox.fill("admin123");
+        await this.usernameBox.fill(username);
+        await this.passwordBox.fill(password);
         await this.loginButton.click();
     }
 

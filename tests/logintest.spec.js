@@ -1,25 +1,40 @@
 import {test, expect} from '@playwright/test';
+const {query} =  require('../Pages/database');
 const { Orange } = require('../Pages/Orange').default;
 
 test.use({viewport : {width:1500, height:700}});
 
-test('Login-Logout-Test', async function ({page}) {
+test('Login-Logout-Test-Pass', async function ({page}) {
 
+    const result = await query('SELECT username, password FROM testdata')
+ 
     const OrangeWeb = new Orange(page);
     
     await page.goto("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
 
-    await OrangeWeb.login("Admin", "admin123");
+    await OrangeWeb.login(result[0].username, result[0].password); // hard code : "Admin", "admin123"
 
-    // await expect(page).toHaveURL(/dashboard/);
     await expect(page.url()).toContain('dashboard');    
     
     await OrangeWeb.logout();
 
-    await expect(page.url()).toContain('login');            
+    await expect(page.url()).toContain('login');  
 
 });
 
+test('Login-Logout-Test-Fail', async function ({page}) {
+
+    const result = await query('SELECT username, password FROM testdata')
+ 
+    const OrangeWeb = new Orange(page);
+    
+    await page.goto("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
+
+    await OrangeWeb.login(result[1].username, result[1].password);  // hard code  : "Admin", "admin1" 
+
+    await expect(page.getByText("invalid credentials")).toBeVisible();    
+
+});
 
 
 
