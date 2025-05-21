@@ -1,12 +1,40 @@
-import {test, expect} from '@playwright/test';
+import {test, expect, request} from '@playwright/test';
 const {query} =  require('../Pages/database');
 const { Orange } = require('../Pages/Orange').default;
 
 test.use({viewport : {width:1500, height:700}});
 
+
+test.only('Login-API-Interception', async function({page}){
+    const result = await query('SELECT username, password FROM testdata')
+
+    page.on('request', request => {
+        console.log(`➡️ Request: ${request.method()} ${request.url()}`);
+    });
+
+    page.on('response', response => {
+        console.log(`⬅️ Response: ${response.status()} ${response.url()}`);
+    });
+ 
+    const OrangeWeb = new Orange(page);
+    
+    await page.goto("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
+
+    await OrangeWeb.login(result[0].username, result[0].password);
+});
+
+
 test('Login-Logout-Test-Pass', async function ({page}) {
 
     const result = await query('SELECT username, password FROM testdata')
+
+    // page.on('request', request => {
+    //     console.log(`➡️ Request: ${request.method()} ${request.url()}`);
+    // });
+
+    // page.on('response', response => {
+    //     console.log(`⬅️ Response: ${response.status()} ${response.url()}`);
+    // });
  
     const OrangeWeb = new Orange(page);
     
@@ -14,11 +42,12 @@ test('Login-Logout-Test-Pass', async function ({page}) {
 
     await OrangeWeb.login(result[0].username, result[0].password); // hard code : "Admin", "admin123"
 
-    await expect(page.url()).toContain('dashboard');    
+    await expect(page.url()).toContain('dashboard');   
     
     await OrangeWeb.logout();
 
     await expect(page.url()).toContain('login');  
+    
 
 });
 
@@ -30,7 +59,7 @@ test('Login-Logout-Test-Fail', async function ({page}) {
     
     await page.goto("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
 
-    await OrangeWeb.login(result[1].username, result[1].password);  // hard code  : "Admin", "admin1" 
+    await OrangeWeb.login(result[0].username, result[0].password);  // hard code  : "Admin", "admin1" 
 
     await expect(page.getByText("invalid credentials")).toBeVisible();    
 
@@ -50,18 +79,10 @@ test('Login-Logout-Test-Fail', async function ({page}) {
 
 
 
-
-
-
-
-
-
-
-
 // ui flow intercept api, how can I do that ?
 // how to interact with api ? 
 // javaScript basics, async await [naveen automation playlist]
-// database integration, sql integration 
+// database integration, sql integration. DONE. 
 // playwright basic commands 
 // push this code in github and make sir a collaborator. DONE.
 
@@ -70,7 +91,19 @@ test('Login-Logout-Test-Fail', async function ({page}) {
 
 
 
+// test.only('Login-API-', async function({browser}){
 
+//     const apiContext = await request.newContext();
+//     const loginResponse = await apiContext.post('https://opensource-demo.orangehrmlive.com/web/index.php/auth/validate', {
+//         form: {
+//             username: 'Admin',
+//             password: 'admin123'
+//         }
+//     });
+
+//     console.log(loginResponse.status());
+
+// });
 
 
 

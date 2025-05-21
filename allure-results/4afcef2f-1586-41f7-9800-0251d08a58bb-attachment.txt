@@ -1,0 +1,2 @@
+➡️ Request: GET https://opensource-demo.orangehrmlive.com/web/index.php/auth/login
+⬅️ Response: 500 https://opensource-demo.orangehrmlive.com/web/index.php/auth/login
